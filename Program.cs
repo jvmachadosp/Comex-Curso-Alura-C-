@@ -68,7 +68,43 @@ void CadastraCliente()
     string nomeDoCliente = Console.ReadLine()!;
     Console.Write("Digite o CPF  do cliente: ");
     string cpfDoCliente = Console.ReadLine()!;
-    Cliente cliente = new Cliente(nomeDoCliente, cpfDoCliente);
+    Console.Write("Digite o email do cliente: ");
+    string emailDoCliente = Console.ReadLine()!;
+    Console.Write("Digite a profissão do cliente: ");
+    string profissaoDoCliente = Console.ReadLine()!;
+    Console.Write("Digite o telefone do cliente: ");
+    string telefoneDoCliente = Console.ReadLine()!;
+
+    Console.Write("Digite a rua do cliente: ");
+    string ruaDoCliente = Console.ReadLine()!;
+    Console.Write("Digite o número da casa: ");
+    string numeroDoCliente = Console.ReadLine()!;
+    Console.Write("Digite a cidade: ");
+    string cidadeDoCliente = Console.ReadLine()!;
+    Console.Write("Digite o estado: ");
+    string estadoDoCliente = Console.ReadLine()!;
+    Console.Write("Digite o bairro: ");
+    string bairroDoCliente = Console.ReadLine()!;
+    Console.Write("Digite o complemento: ");
+    string complementoDoCliente = Console.ReadLine()!;
+
+    Endereco enderecoDoCliente = new Endereco(
+        ruaDoCliente,
+        numeroDoCliente,
+        cidadeDoCliente,
+        estadoDoCliente,
+        bairroDoCliente,
+        complementoDoCliente
+    );
+
+    Cliente cliente = new Cliente(
+        nomeDoCliente,
+        cpfDoCliente,
+        emailDoCliente,
+        profissaoDoCliente,
+        telefoneDoCliente,
+        enderecoDoCliente
+    );
     clientesRegistrados.Add(nomeDoCliente, cliente);
     Console.WriteLine($"O cliente {nomeDoCliente} foi registrado com sucesso!");
     Console.WriteLine($"Usuário {nomeDoCliente} ({cpfDoCliente}) cadastrado com sucesso.");
@@ -99,6 +135,26 @@ void CadastraProduto()
     Console.Write("Digite o preço do produto: ");
     decimal precoDoProduto = decimal.Parse(Console.ReadLine()!);
     Produto produto = new Produto(nomeDoProduto, precoDoProduto);
+
+    Console.Write("Deseja adicionar descrição? (s/n): ");
+    string adicionarDescricao = Console.ReadLine()!;
+    if (adicionarDescricao.Trim().ToLower() == "s")
+    {
+        Console.Write("Digite a descrição do produto: ");
+        produto.Descricao = Console.ReadLine()!;
+    }
+
+    Console.Write("Deseja adicionar quantidade? (s/n): ");
+    string adicionarQuantidade = Console.ReadLine()!;
+    if (adicionarQuantidade.Trim().ToLower() == "s")
+    {
+        Console.Write("Digite a quantidade do produto: ");
+        if (int.TryParse(Console.ReadLine(), out int quantidadeProduto))
+        {
+            produto.Quantidade = quantidadeProduto;
+        }
+    }
+
     produtosRegistrados.Add(nomeDoProduto, produto);
     Console.WriteLine($"Produto {nomeDoProduto} cadastrado com sucesso.");
     Thread.Sleep(3000);
