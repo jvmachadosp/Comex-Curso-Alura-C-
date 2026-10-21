@@ -1,6 +1,6 @@
 namespace Comex;
 
-public class Cliente
+public class Cliente : IIdentificavel
 {
     public string Nome { get; }
     public string CPF { get; }
@@ -21,5 +21,10 @@ public class Cliente
         Profissao = profissao;
         Telefone = telefone;
         Endereco = endereco;
+    }
+
+    public string Identificar()
+    {
+        return $"Nome: {Nome}, CPF: {CPF}";
     }
 }
