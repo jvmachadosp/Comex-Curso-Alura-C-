@@ -9,7 +9,7 @@ public class Menu
         this.service = service;
     }
 
-    public void ExibirMenu()
+    public async Task ExibirMenu()
     {
         bool executando = true;
 
@@ -25,6 +25,7 @@ public class Menu
             Console.WriteLine("Digite 6 para fechar compra");
             Console.WriteLine("Digite 7 para listar produtos por nome");
             Console.WriteLine("Digite 8 para listar produtos por preço");
+            Console.WriteLine("Digite 9 para buscar produtos em API externa");
             Console.WriteLine("Digite -1 para finalizar o programa");
 
             Console.Write("\nDigite a sua opção: ");
@@ -61,6 +62,9 @@ public class Menu
                     break;
                 case 8:
                     ListarProdutosPorPreco();
+                    break;
+                case 9:
+                    await ConsultarApiExterna();
                     break;
                 case -1:
                     Console.WriteLine("Tchau tchau :)");
@@ -300,6 +304,44 @@ public class Menu
         foreach (var produto in service.ListarProdutosOrdenadosPorPreco())
         {
             Console.WriteLine($"Produto: {produto.Nome} | Preco: {produto.Preco}");
+        }
+
+        Console.WriteLine("\nPressione qualquer tecla para voltar ao menu...");
+        Console.ReadKey();
+    }
+
+    private async Task ConsultarApiExterna()
+    {
+        Console.Clear();
+        ExibirTituloDaOpcao("Consulta API externa");
+
+        try
+        {
+            List<Produto> produtosExternos = await service.BuscarProdutosExternosAsync();
+
+            Console.WriteLine("Consulta realizada com sucesso.");
+            Console.WriteLine("Produtos desserializados:");
+
+            foreach (Produto produto in produtosExternos)
+            {
+                Console.WriteLine($"Nome: {produto.Nome} | Preço: {produto.Preco} | Descrição: {produto.Descricao}");
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            Console.WriteLine($"Erro ao consultar a API externa: {ex.Message}");
+        }
+        catch (System.Text.Json.JsonException ex)
+        {
+            Console.WriteLine($"Erro ao desserializar resposta da API: {ex.Message}");
+        }
+        catch (TaskCanceledException)
+        {
+            Console.WriteLine("A consulta da API externa excedeu o tempo limite.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro inesperado durante a consulta: {ex.Message}");
         }
 
         Console.WriteLine("\nPressione qualquer tecla para voltar ao menu...");

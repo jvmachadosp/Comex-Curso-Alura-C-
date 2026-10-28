@@ -2,6 +2,7 @@ namespace Comex;
 
 public class ComexService
 {
+    private readonly HttpClient httpClient = new();
     private readonly Dictionary<string, Cliente> clientesRegistrados = new();
     private readonly Dictionary<string, Produto> produtosRegistrados = new();
     private readonly Dictionary<string, List<Produto>> carrinhoCompras = new();
@@ -101,5 +102,30 @@ public class ComexService
         }
 
         return true;
+    }
+
+    public async Task<List<Produto>> BuscarProdutosExternosAsync()
+    {
+        const string uri = "https://fakestoreapi.com/products";
+
+        using HttpResponseMessage resposta = await httpClient.GetAsync(uri);
+        resposta.EnsureSuccessStatusCode();
+
+        string json = await resposta.Content.ReadAsStringAsync();
+        List<ProdutoApiResponse>? produtosDaApi = System.Text.Json.JsonSerializer.Deserialize<List<ProdutoApiResponse>>(json);
+
+        if (produtosDaApi is null)
+        {
+            return new List<Produto>();
+        }
+
+        return produtosDaApi
+            .Select(produtoApi =>
+            {
+                Produto produto = new Produto(produtoApi.Nome, produtoApi.Preco);
+                produto.Descricao = produtoApi.Descricao;
+                return produto;
+            })
+            .ToList();
     }
 }
