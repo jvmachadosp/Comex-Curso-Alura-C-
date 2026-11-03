@@ -2,12 +2,20 @@ namespace Comex;
 
 public class Menu
 {
-    private readonly ComexService service;
+    protected readonly ComexService service;
+    private readonly Dictionary<int, Menu> menusRegistrados = new();
 
     public Menu(ComexService service)
     {
         this.service = service;
     }
+
+    public void Registrar(int opcao, Menu menu)
+    {
+        menusRegistrados[opcao] = menu;
+    }
+
+    public virtual Task ExecutarAsync() => ExibirMenu();
 
     public async Task ExibirMenu()
     {
@@ -26,6 +34,10 @@ public class Menu
             Console.WriteLine("Digite 7 para listar produtos por nome");
             Console.WriteLine("Digite 8 para listar produtos por preço");
             Console.WriteLine("Digite 9 para buscar produtos em API externa");
+            foreach (var (opcao, menuRegistrado) in menusRegistrados)
+            {
+                Console.WriteLine($"Digite {opcao} para {menuRegistrado.Descricao}");
+            }
             Console.WriteLine("Digite -1 para finalizar o programa");
 
             Console.Write("\nDigite a sua opção: ");
@@ -71,13 +83,22 @@ public class Menu
                     executando = false;
                     break;
                 default:
-                    Console.WriteLine("Opção inválida");
+                    if (menusRegistrados.TryGetValue(opcaoEscolhidaNumerica, out Menu? menuRegistrado))
+                    {
+                        await menuRegistrado.ExecutarAsync();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Opção inválida");
+                    }
                     break;
             }
         }
     }
 
-    private static void ExibirTituloDaOpcao(string titulo)
+    public virtual string Descricao => "abrir o menu";
+
+    protected static void ExibirTituloDaOpcao(string titulo)
     {
         int quantidadeDeLetras = titulo.Length;
         string asteriscos = string.Empty.PadLeft(quantidadeDeLetras, '*');
