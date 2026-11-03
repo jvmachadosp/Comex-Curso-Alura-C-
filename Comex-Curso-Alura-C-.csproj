@@ -10,6 +10,11 @@
 
   <ItemGroup>
     <Compile Remove="Comex.Tests\**\*.cs" />
+    <Compile Remove="Comex.GeneradorRelatorio\**\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Comex.GeneradorRelatorio" Version="1.0.0" />
   </ItemGroup>
 
 </Project>

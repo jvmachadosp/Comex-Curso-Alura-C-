@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <PackageId>Comex.GeneradorRelatorio</PackageId>
+    <Title>Comex Gerador de Relatório</Title>
+    <Version>1.0.0</Version>
+    <Authors>jvmachado</Authors>
+    <Description>Biblioteca reutilizável para exportação de relatórios de produtos do Comex (CSV), desacoplada via interface IGeradorRelatorio.</Description>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageOutputPath>$(MSBuildThisFileDirectory)..\nuget-local</PackageOutputPath>
+  </PropertyGroup>
+
+</Project>

@@ -112,6 +112,8 @@ public class ComexService
         resposta.EnsureSuccessStatusCode();
 
         string json = await resposta.Content.ReadAsStringAsync();
+        await File.WriteAllTextAsync("produtos.json", json);
+
         List<ProdutoApiResponse>? produtosDaApi = System.Text.Json.JsonSerializer.Deserialize<List<ProdutoApiResponse>>(json);
 
         if (produtosDaApi is null)
